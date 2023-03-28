@@ -88,6 +88,6 @@
     docker build -t imagename .
     ```
 - run the docker container: (docker run -p HOST_PORT:CONTAINER_PORT image_name)
-    ````
+    ```bash
     docker run -p 23000:23000 imagename
     ```
