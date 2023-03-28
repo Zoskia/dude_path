@@ -2,7 +2,7 @@
 
 ## NODE SETUP
 
-- create package.json with
+- create package.json
     ```bash
     npm init -y
     ````
@@ -58,6 +58,10 @@
     git push -u origin main
     ```
 
+## MONGODB SETUP
+
+
+
 ## DOCKER SETUP
 
 - create 'Dockerfile':
@@ -91,3 +95,5 @@
     ```bash
     docker run -p 23000:23000 imagename
     ```
+### DOCKER COMPOSE
+- create docker-compuse.yaml
