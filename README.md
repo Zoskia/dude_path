@@ -2,6 +2,8 @@
 
 ## NODE SETUP
 
+[Node/Express Tutorial](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/development_environment)
+
 - create package.json
   ```bash
   npm init -y
@@ -30,6 +32,8 @@
   ```
 
 ## GIT SETUP
+
+[Git Tutorial](https://git-scm.com/docs/gittutorial/)
 
 - create repository on github/gitlab/etc
 - create basic .gitignore:
@@ -86,6 +90,8 @@
   ```
 
 ## DOCKER SETUP
+
+[Docker Tutorial](https://www.docker.com/101-tutorial/)
 
 - create 'Dockerfile':
 
