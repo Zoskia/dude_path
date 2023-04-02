@@ -1,0 +1,37 @@
+version: "3.9"
+
+# Define the services that will run in this Docker Compose app
+services:
+  
+  # Define the "app" service
+  app:
+    # Build the Docker image for this service from the current directory
+    build: .
+    
+    # Map port 23000 on the host machine to port 23000 on the container
+    ports:
+      - "23000:23000"
+    
+    # Specify that this service depends on the "db" service
+    depends_on:
+      - db
+    
+    # Set an environment variable that the app will use to connect to the MongoDB instance
+    environment:
+      MONGO_URL: mongodb://db:27017/dudeDB
+
+  # Define the "db" service
+  db:
+    # Use the official MongoDB Docker image
+    image: mongo
+    
+    # Always restart this container if it stops for any reason
+    restart: always
+    
+    # Set an environment variable that specifies the name of the MongoDB database to create on startup
+    environment:
+      MONGO_INITDB_DATABASE: dudeDB
+      
+    # Do not expose the database on any port
+    ports:
+      - "127.0.0.1:0:27017"
