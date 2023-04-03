@@ -73,13 +73,9 @@
   brew tap mongodb/brew
   ```
 - update brew and existing formulae
-  ``bash
+  ```bash
   brew update
-
   ```
-
-  ```
-
 - install mongodb
   ```bash
   brew install mongodb-community@6.0
