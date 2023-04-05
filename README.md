@@ -205,6 +205,11 @@
   - Dockerfile
   - package.json
 ```
+-basic node setup in user-service & data-service
+```bash
+npm init -y
+npm install express mongoose
+```
 
 - install proxy in gateway-service:
 
