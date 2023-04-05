@@ -73,9 +73,13 @@
   brew tap mongodb/brew
   ```
 - update brew and existing formulae
-  ```bash
+  ``bash
   brew update
+
   ```
+
+  ```
+
 - install mongodb
   ```bash
   brew install mongodb-community@6.0
@@ -135,7 +139,6 @@
 
   # Define the services that will run in this Docker Compose app
   services:
-
     # Define the "app" service
     app:
       # Build the Docker image for this service from the current directory
@@ -178,3 +181,105 @@
   ```bash
   docker-compose up --build
   ```
+
+## EXERCISE 5
+
+- (new) project structure:
+
+```
+- gateway-service/
+  - src/
+    - index.js
+  - Dockerfile
+  - package.json
+
+- data-service/
+  - src/
+    - index.js
+  - Dockerfile
+  - package.json
+
+- user-service/
+  - src/
+    - index.js
+  - Dockerfile
+  - package.json
+```
+
+- install proxy in gateway-service:
+
+```bash
+npm install http-proxy-middleware
+```
+
+- docker-compose (ports!):
+
+```yaml
+version: "3.8"
+
+services:
+  # Gateway
+  dude_gateway:
+    build: ./gateway-service # Directory to build the service from
+    ports:
+      - "3000:3000" # Map the container port to the host port
+    depends_on:
+      - dude_data_service # Depend on the dude_data_service service
+      - dude_user_service # Depend on the dude_user_service service
+
+  # data-service
+  dude_data_service:
+    build: ./data-service # Directory to build the service from
+    depends_on:
+      - dude_mongo_data # Depend on the dude_mongo_data service
+
+  # user-service
+  dude_user_service:
+    build: ./user-service # Directory to build the service from
+    depends_on:
+      - dude_mongo_user # Depend on the dude_mongo_user service
+
+  # data-service DB
+  dude_mongo_data:
+    image: mongo # Use the mongo image
+    container_name: dude_mongo_data # Set the container name
+    volumes:
+      - dude_data_db:/data/db # Define a volume and map it to the container
+    ports:
+      - "27018:27017" # Map the container port to the host port
+
+  # user-service DB
+  dude_mongo_user:
+    image: mongo # Use the mongo image
+    container_name: dude_mongo_user # Set the container name
+    volumes:
+      - dude_user_db:/data/db # Define a volume and map it to the container
+    ports:
+      - "27019:27017" # Map the container port to the host port
+
+  # Define named volumes for persistent data storage, so that the data is not lost when the container is destroyed
+  volumes:
+    dude_data_db:
+    dude_user_db:
+```
+
+- gateway service:
+
+```javascript
+const { createProxyMiddleware } = require("http-proxy-middleware");
+
+const dataServiceProxy = createProxyMiddleware("/api/data", {
+  target: "http://dude_data_service:3001",
+  pathRewrite: { "^/api/data": "" },
+  changeOrigin: true,
+});
+
+const userServiceProxy = createProxyMiddleware("/api/user", {
+  target: "http://dude_user_service:3002",
+  pathRewrite: { "^/api/user": "" },
+  changeOrigin: true,
+});
+
+app.use(dataServiceProxy);
+app.use(userServiceProxy);
+```
